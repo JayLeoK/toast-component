@@ -3,12 +3,16 @@ import React from "react";
 import Button from "../Button";
 
 import styles from "./ToastPlayground.module.css";
+import Toast from "../Toast/Toast";
 
 const VARIANT_OPTIONS = ["notice", "warning", "success", "error"];
 
 function ToastPlayground() {
-  const [variantSelected, setVariantSelected] = React.useState("notice");
+  const defaultVariant = VARIANT_OPTIONS[0];
+
+  const [variantSelected, setVariantSelected] = React.useState(defaultVariant);
   const [message, setMessage] = React.useState("");
+  const [toastOpen, setToastOpen] = React.useState(false);
 
   return (
     <div className={styles.wrapper}>
@@ -16,6 +20,15 @@ function ToastPlayground() {
         <img alt="Cute toast mascot" src="/toast.png" />
         <h1>Toast Playground</h1>
       </header>
+
+      {toastOpen && (
+        <Toast
+          handleDismiss={() => setToastOpen(false)}
+          variant={variantSelected}
+        >
+          {message}
+        </Toast>
+      )}
 
       <div className={styles.controlsWrapper}>
         <div className={styles.row}>
@@ -38,32 +51,31 @@ function ToastPlayground() {
 
         <div className={styles.row}>
           <div className={styles.label}>Variant</div>
-          {VARIANT_OPTIONS.map((variantName) => {
-            return (
-              <div
-                key={`variant-${variantName}-wrapper`}
-                className={`${styles.inputWrapper} ${styles.radioWrapper}`}
-              >
-                <label htmlFor={`variant-${variantName}`}>
+          <div className={`${styles.inputWrapper} ${styles.radioWrapper}`}>
+            {VARIANT_OPTIONS.map((variantOption) => {
+              const variantId = `variant-${variantOption}`;
+
+              return (
+                <label key={variantId} htmlFor={variantId}>
                   <input
-                    id={`variant-${variantName}`}
+                    id={variantId}
                     type="radio"
                     name="variant"
-                    value={variantName}
-                    checked={variantSelected === variantName}
+                    value={variantOption}
+                    checked={variantSelected === variantOption}
                     onChange={(event) => setVariantSelected(event.target.value)}
                   />
-                  {variantName}
+                  {variantOption}
                 </label>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
 
         <div className={styles.row}>
           <div className={styles.label} />
           <div className={`${styles.inputWrapper} ${styles.radioWrapper}`}>
-            <Button>Pop Toast!</Button>
+            <Button onClick={() => setToastOpen(true)}>Pop Toast!</Button>
           </div>
         </div>
       </div>
