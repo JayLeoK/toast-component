@@ -28,7 +28,7 @@ function Toast({ variant = "notice", icon = null, children, handleDismiss }) {
       </div>
       <p className={styles.content}>{children}</p>
       <button className={styles.closeButton}>
-        <X onClick={handleDismiss} size={24} />
+        <X onClick={() => handleDismiss()} size={24} />
         <VisuallyHidden>Dismiss message</VisuallyHidden>
       </button>
     </div>
